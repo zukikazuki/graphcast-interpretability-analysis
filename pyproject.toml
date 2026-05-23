@@ -1,0 +1,17 @@
+[project]
+name = "graphcast"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "cdsapi==0.7.7",
+    "matplotlib==3.10.7",
+    "netcdf4==1.7.3",
+    "numpy==2.2.6",
+    "pandas==2.3.3",
+    "pyyaml>=6.0",
+    "tenacity>=8.2",
+    "tqdm>=4.66",
+    "xarray>=2025.12.0",
+]

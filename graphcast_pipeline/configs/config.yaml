@@ -1,0 +1,72 @@
+# --------------------------------------------------
+# GraphCast パイプライン共通設定ファイル
+# --------------------------------------------------
+# 期間や変数を変更しても 3 ステージスクリプトはこの YAML だけを読み取ります。
+# CLI で --start / --end を上書きできるようにもする予定です。
+# --------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# 1. 予測対象期間
+# -----------------------------------------------------------------------------
+period:
+  # 予測対象期間の開始日 (inclusive)
+  start: "2022-01-01T00:00:00"
+  # 予測対象期間の終了日 (inclusive)
+  end:   "2022-12-31T18:00:00"
+
+# -----------------------------------------------------------------------------
+# 2. データ/モデル解像度設定
+# -----------------------------------------------------------------------------
+resolution: 1.0    # °  (GraphCast Small = 1.0, HighRes = 0.25)
+levels: 13        # 使用する気圧レベル数 (13 / 25 / 37)
+lookback_hours: 12    # 最新時刻 t から過去に遡って取得する時間（GraphCast は 6h）
+
+# -----------------------------------------------------------------------------
+# 3. 変数リスト
+#    ― GraphCast Small ERA5 学習チェックポイントと同じ構成をデフォルトに
+# -----------------------------------------------------------------------------
+variables:
+  # ---- Surface (single-level) variables requested from reanalysis-era5-single-levels
+  single_levels:
+    - 2m_temperature
+    - mean_sea_level_pressure
+    - 10m_u_component_of_wind
+    - 10m_v_component_of_wind
+    - total_precipitation
+    - geopotential
+    - lsm
+  # ---- Pressure‐level variables requested from reanalysis-era5-pressure-levels
+  pressure_levels:
+    - temperature
+    - geopotential
+    - u_component_of_wind
+    - v_component_of_wind
+    - vertical_velocity
+    - specific_humidity
+
+# -----------------------------------------------------------------------------
+# 4. ストレージパス
+# -----------------------------------------------------------------------------
+
+root: "/media/dl-box/SSD-SCTU3A/graphcast_data"
+storage:
+  raw_dir:        "{root}/data/raw/era5"
+  processed_dir:  "{root}/data/processed/graphcast_inputs"
+  forecast_dir:   "{root}/outputs/forecasts"
+  vjp_output_dir: "{root}/outputs/vjp"
+  log_dir:        "{root}/logs"
+
+# -----------------------------------------------------------------------------
+# 5. モデル関連
+# -----------------------------------------------------------------------------
+model:
+  checkpoint_path: "/workspace/assets/graphcast-small/weights/graphcast_small_era5_res1p0_pl13_v1.npz"  # 事前学習済みモデル
+  stats_dir:       "/workspace/assets/graphcast-small/stats"                                          # mean/stddev 等
+  # mode: standard                                                                                   # 通常推論モード
+  mode: vjp                                                                                           # VJP 互換性スコア計算モード
+
+# 6. 実行オプション
+# -----------------------------------------------------------------------------
+compute:
+  num_workers: 12     # DL / 前処理の並列ワーカー数
+  use_pmap: false    # True にすると run_graphcast.py で pmap (multi-TPU/GPU) 使用 

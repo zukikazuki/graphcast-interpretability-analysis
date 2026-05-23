@@ -1,0 +1,30 @@
+.env
+graphcast_cache/
+
+# Python cache files
+__pycache__/
+
+output/
+
+activations/
+
+graphcast_pipeline/data/
+assets/
+
+# macOS system files
+.DS_Store
+
+# LaTeX temporary files
+*.dvi
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+*.aux
+*.bbl
+*.blg
+*.lof
+*.lot
+*.toc
+*.out
+*.pdf

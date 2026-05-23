@@ -1,0 +1,14 @@
+{
+  "started_at": "2025-07-14T08:27:40.452770Z",
+  "ended_at": "2025-07-14T08:30:51.036254Z",
+  "duration_sec": 190.583484,
+  "resolution": 1.0,
+  "lookback_hours": 12,
+  "period_start": "2022-01-01T00:00:00",
+  "period_end": "2022-01-02T00:00:00",
+  "num_workers": 2,
+  "slots": 7,
+  "files": 14,
+  "bytes": 76798812,
+  "avg_mib_per_sec": 0.38
+}

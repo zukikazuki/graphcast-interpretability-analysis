@@ -1,0 +1,19 @@
+# Base image
+FROM python:3.10-slim
+
+ENV PIP_NO_CACHE_DIR=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /workspace
+
+# Minimal tools needed for git+https installs
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends git && \
+    rm -rf /var/lib/apt/lists/*
+
+# Preinstall data-pipeline requirements into the image
+COPY graphcast_pipeline/requirements.data_pipeline.txt /tmp/requirements.data_pipeline.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.data_pipeline.txt
+
+CMD ["/bin/bash"]
+

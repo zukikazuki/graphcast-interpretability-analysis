@@ -1,0 +1,43 @@
+services:
+  graphcast:
+    build: .
+    container_name: graphcast
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    environment:
+      XLA_PYTHON_CLIENT_PREALLOCATE: "false"
+      XLA_PYTHON_CLIENT_MEM_FRACTION: "0.85"
+      TF_GPU_ALLOCATOR: "cuda_malloc_async"
+
+    volumes:
+      - ./:/workspace
+      - /media/dl-box/SSD-SCTU3A/graphcast_data:/media/dl-box/SSD-SCTU3A/graphcast_data
+
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"] 
+
+  data_pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile.downloader
+    container_name: graphcast_data_pipeline
+    environment:
+      PIP_NO_CACHE_DIR: "1"
+      PYTHONPATH: /workspace
+    volumes:
+      - ./:/workspace
+      # 認証ファイルをマウントする場合は以下を有効化
+      - /home/dl-box/.cdsapirc:/root/.cdsapirc:ro
+      - /media/dl-box/SSD-SCTU3A/graphcast_data:/media/dl-box/SSD-SCTU3A/graphcast_data
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
