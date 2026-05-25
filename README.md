@@ -6,6 +6,8 @@ I used layerwise decoding and output-side readouts to examine how decoded foreca
 
 This repository is intended as a research artifact, not a fully self-contained reproduction package. It includes selected analysis code, figures, notes, and the GraphCast source code used for the experiments. It does not include pretrained model weights, ERA5 data, local cache files, or the full original experimental environment.
 
+For a short summary of the main observations and interpretation, see [`RESULTS.md`](RESULTS.md).
+
 ## Research Focus
 
 GraphCast maps weather fields through a grid-to-mesh encoder, repeated mesh message passing, and a mesh-to-grid decoder. This project probes that internal computation by:
@@ -15,7 +17,7 @@ GraphCast maps weather fields through a grid-to-mesh encoder, repeated mesh mess
 - aggregating layerwise relative scores against the final GraphCast-small processor step
 - estimating decoder sensitivity with VJP/Hutchinson scores for processor layers
 
-The interpretability angle is similar in spirit to layerwise model-internals analysis in large neural systems: instead of treating the model only as an input-output forecaster, the project asks how internal representations evolve and when they become useful to the decoder.
+Instead of treating GraphCast only as an input-output forecaster, this project examines how its intermediate representations evolve across processor depth.
 
 ## Repository Layout
 
